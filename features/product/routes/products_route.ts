@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getAllProducts, createProduct } from "../controllers/products_controller";
+import { getAllProducts, createProduct, getProductById} from "../controllers/products_controller";
 import { check } from "express-validator";
 import { validateFields } from "../../../middlewares/validate_fields";
 
@@ -16,5 +16,6 @@ router.post('/', [
     check('description', 'description can not be null').notEmpty(),
     validateFields
 ], createProduct)
+router.get('/:id', getProductById)
 
 export default router
