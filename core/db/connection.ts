@@ -6,7 +6,7 @@ const dbPassword : string = process.env.DB_PASSWORD|| ''
 
 const db = new Sequelize(dbName, dbUser, dbPassword, {
     dialect: 'sqlite',
-    storage: './db/database.sqlite',
+    storage: './core/db/database.sqlite',
   
 })
 

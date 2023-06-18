@@ -6,8 +6,8 @@ import {
   createAnUser,
   modifyAnUserById,
   deleteAnUserById,
-} from '../controllers/user'
-import { validateFields } from '../middlewares/validate_fields'
+} from '../contollers/user'
+import { validateFields } from '../../../middlewares/validate_fields'
 const router = Router()
 
 router.get('/', getUsers)

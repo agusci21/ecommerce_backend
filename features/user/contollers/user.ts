@@ -1,8 +1,9 @@
 import { Request, Response } from 'express'
 import User from '../models/user'
 import bcryptjs from 'bcryptjs'
-import { checkIfEmailExists } from '../helpers/check_if_email_exists'
+import { checkIfEmailExists } from '../../../core/helpers/check_if_email_exists'
 import { v4 as uuidv4 } from 'uuid';
+import Product from '../../product/models/product_model';
 uuidv4()
 
 export const getUsers = async (req: Request, res: Response) => {
@@ -61,5 +62,45 @@ export const createAnUser = async (req: Request, res: Response) => {
     })
   }
 }
-export const modifyAnUserById = (req: Request, res: Response) => {}
+export const modifyAnUserById = async (req: Request, res: Response) => {
+  try {
+    if(!req.params.id){
+      return res.status(400).json({
+        msg: "El id es obligatorio"
+      })
+    }
+    const user = await User.findByPk(req.params.id)
+    if(!user){
+      return res.status(404).json({
+        msg: "El usuario no existe"
+      })
+    }
+  if(req.body.email){
+    const existEmail = await checkIfEmailExists(req.body.email)
+    if(existEmail) return res.status(400).json({
+      msg: `El email ${req.body.email} ya esta en uso`
+    })
+  }
+    const {password, ...data} = req.body
+    console.log(data)
+    user.set({
+      data
+    })
+    console.log(user)
+
+    await user.save()
+    return res.status(200).json({
+      user
+    })
+    
+  } catch (error) {
+    console.clear()
+    console.log(error)
+    return res.status(500).json({
+      msg: 'Problema interno del servidor',
+    })
+  }
+
+
+}
 export const deleteAnUserById = (req: Request, res: Response) => {}

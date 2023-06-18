@@ -1,5 +1,5 @@
 import { Model, DataTypes } from 'sequelize'
-import db from '../db/connection'
+import db from '../../../core/db/connection'
 
 class User extends Model {
   declare id: string

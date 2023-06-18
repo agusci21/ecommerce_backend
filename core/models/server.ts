@@ -1,6 +1,7 @@
 import express, { Application } from 'express'
-import userRoutes from '../routes/user';
-import authRoutes from '../routes/auth';
+import userRoutes from '../../features/user/routes/user';
+import authRoutes from '../../features/auth/routes/auth';
+import productsRoutes from '../../features/product/routes/products_route'
 import cors from 'cors';
 import dotEnv from 'dotenv'
 import db from '../db/connection';
@@ -14,15 +15,15 @@ class Server {
     private apiPaths = {
         users: '/api/users',
         auth: '/api/auth',
+        products: '/api/products'
     }
 
     constructor() {
         this.app  = express();
         this.port = process.env.PORT || '8000';
         
-        // Métodos iniciales
         this.dbConnection();
-        this.middlewares(); // Es importante este orden en los metodos del constructor
+        this.middlewares(); 
         this.routes();
     }
 
@@ -40,19 +41,15 @@ class Server {
     }
 
     middlewares() {
-
-        // CORS
         this.app.use( cors() );
-
-        // Lectura del body
         this.app.use( express.json() );
-
     }
 
 
     routes() {
         this.app.use( this.apiPaths.users, userRoutes )
         this.app.use( this.apiPaths.auth, authRoutes )
+        this.app.use( this.apiPaths.products, productsRoutes )
     }
 
 

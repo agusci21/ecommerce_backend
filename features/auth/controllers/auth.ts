@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
-import { checkIfEmailExists } from "../helpers/check_if_email_exists";
+import { checkIfEmailExists } from "../../../core/helpers/check_if_email_exists";
 import bcryptjs from 'bcryptjs';
-import User from '../models/user';
+import User from '../../user/models/user';
 import jwt from 'jsonwebtoken'
-import { generateJWT } from '../helpers/generate_jwt';
+import { generateJWT } from '../../../core/helpers/generate_jwt';
 
 export const login = async (req: Request, res: Response) => {
     const {email, password} = req.body
