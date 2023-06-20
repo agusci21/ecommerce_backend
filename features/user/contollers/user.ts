@@ -3,10 +3,9 @@ import User from '../models/user'
 import bcryptjs from 'bcryptjs'
 import { checkIfEmailExists } from '../../../core/helpers/check_if_email_exists'
 import { v4 as uuidv4 } from 'uuid';
-import Product from '../../product/models/product_model';
 uuidv4()
 
-export const getUsers = async (req: Request, res: Response) => {
+export const getUsers = async (_req: Request, res: Response) => {
   try {
     const users = await User.findAll()
     return res.json({users})
@@ -103,4 +102,4 @@ export const modifyAnUserById = async (req: Request, res: Response) => {
 
 
 }
-export const deleteAnUserById = (req: Request, res: Response) => {}
+export const deleteAnUserById = (_req: Request, _res: Response) => {}

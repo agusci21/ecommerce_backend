@@ -1,4 +1,4 @@
-import { application, Router } from 'express'
+import { Router } from 'express'
 import { check } from 'express-validator'
 import {
   getUsers,

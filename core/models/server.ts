@@ -3,7 +3,6 @@ import userRoutes from '../../features/user/routes/user';
 import authRoutes from '../../features/auth/routes/auth';
 import productsRoutes from '../../features/product/routes/products_route'
 import cors from 'cors';
-import dotEnv from 'dotenv'
 import db from '../db/connection';
 import { createTablesIfNotExists } from '../helpers/table_creator_helper';
 

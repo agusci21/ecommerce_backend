@@ -6,7 +6,7 @@ class Product extends Model{
     declare name: string;
     declare description: string;
     declare stock : number;
-    declare price : number; 
+    declare price : number;
 }
 
 Product.init({

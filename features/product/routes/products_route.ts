@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getAllProducts, createProduct, getProductById} from "../controllers/products_controller";
+import { getAllProducts, createProduct, getProductById, editProductById} from "../controllers/products_controller";
 import { check } from "express-validator";
 import { validateFields } from "../../../middlewares/validate_fields";
 
@@ -17,5 +17,7 @@ router.post('/', [
     validateFields
 ], createProduct)
 router.get('/:id', getProductById)
+
+router.put('/:id', editProductById)
 
 export default router
