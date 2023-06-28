@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getAllProducts, createProduct, getProductById, editProductById} from "../controllers/products_controller";
+import { getAllProducts, createProduct, getProductById, editProductById, createProductsMasive} from "../controllers/products_controller";
 import { check } from "express-validator";
 import { validateFields } from "../../../middlewares/validate_fields";
 
@@ -16,6 +16,10 @@ router.post('/', [
     check('description', 'description can not be null').notEmpty(),
     validateFields
 ], createProduct)
+router.post('/masive',[
+    check('products', 'products must not be empty').notEmpty(),
+    validateFields
+], createProductsMasive)
 router.get('/:id', getProductById)
 
 router.put('/:id', editProductById)

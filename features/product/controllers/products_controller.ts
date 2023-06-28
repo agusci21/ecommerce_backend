@@ -115,3 +115,50 @@ export const editProductById = async (req: Request, res: Response) => {
             })
     }
 }
+
+export const createProductsMasive = async (req: Request, res: Response) => {
+    try {
+      const productsRawList = req.body.products;
+      const productList: Product[] = [];
+      const productsCreated: Product[] = [];
+      const productsDuplicated: Product[] = [];
+  
+      for (const productMap of productsRawList) {
+        const product = Product.build(productMap);
+        product.id = uuidv4();
+        productList.push(product);
+      }
+  
+      for (const product of productList) {
+        try {
+          const existingProduct = await Product.findOne({ where: { name: product.name } });
+  
+          if (existingProduct) {
+            productsDuplicated.push(product);
+          } else {
+            await product.save();
+            productsCreated.push(product);
+          }
+        } catch (error) {
+          console.log(error);
+          productsDuplicated.push(product);
+        }
+      }
+  
+      const responseObj: { products_created: Product[], products_with_duplicates?: Product[] } = {
+        products_created: productsCreated
+      };
+  
+      if (productsDuplicated.length > 0) {
+        responseObj.products_with_duplicates = productsDuplicated;
+      }
+  
+      res.status(200).json(responseObj);
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({
+        msg: "Internal server error",
+      });
+    }
+  };
+  
