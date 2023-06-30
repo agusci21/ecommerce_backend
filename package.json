@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "prestart": "tsc && npm install",
     "start": "node dist/index",
     "test": "nodemon dist/index"
   },
