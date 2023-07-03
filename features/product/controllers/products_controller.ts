@@ -6,7 +6,7 @@ import Category from "../../category/models/category";
 
 export const getAllProducts = async (req: Request, res: Response) => {
     try {
-        const { filterQuery } = req.query
+        const { filterQuery, categoryId } = req.query
         let products: Product[] = [];
         if (filterQuery) {
             products = await Product.findAll(
@@ -20,7 +20,10 @@ export const getAllProducts = async (req: Request, res: Response) => {
             )
         } else {
             products = await Product.findAll()
+        }
 
+        if(categoryId){
+           products = products.filter(e => e.categoryId == categoryId )
         }
 
         return res.status(200).json({
