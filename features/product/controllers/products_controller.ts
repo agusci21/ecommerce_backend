@@ -2,6 +2,7 @@ import { Request, Response } from "express"
 import { v4 as uuidv4 } from 'uuid';
 import { Op } from 'sequelize'
 import Product from "../models/product_model"
+import Category from "../../category/models/category";
 
 export const getAllProducts = async (req: Request, res: Response) => {
     try {
@@ -92,7 +93,7 @@ export const editProductById = async (req: Request, res: Response) => {
                 msg: 'id should not exist'
             })
         }
-        const { name, price, stock, description } = req.body
+        const { name, price, stock, description, categoryId } = req.body
         const product = await Product.findByPk(id)
         if (!product) {
             return res.status(404).json({
@@ -104,7 +105,19 @@ export const editProductById = async (req: Request, res: Response) => {
         product.description = description ?? product.description;
         product.stock = stock ?? product.stock
 
+        if (categoryId) {
+            const category = await Category.findByPk(categoryId)
+            if (!category) {
+                return res.status(404).json({
+                    msg: "Category not found"
+                })
+            }
+
+            product.categoryId = categoryId;
+        }
+
         await product.save()
+
         return res.status(203).json({
             product
         })
@@ -118,46 +131,46 @@ export const editProductById = async (req: Request, res: Response) => {
 
 export const createProductsMasive = async (req: Request, res: Response) => {
     try {
-      const productsRawList = req.body.products;
-      const productList: Product[] = [];
-      const productsCreated: Product[] = [];
-      const productsDuplicated: Product[] = [];
-  
-      for (const productMap of productsRawList) {
-        const product = Product.build(productMap);
-        product.id = uuidv4();
-        productList.push(product);
-      }
-  
-      for (const product of productList) {
-        try {
-          const existingProduct = await Product.findOne({ where: { name: product.name } });
-  
-          if (existingProduct) {
-            productsDuplicated.push(product);
-          } else {
-            await product.save();
-            productsCreated.push(product);
-          }
-        } catch (error) {
-          console.log(error);
-          productsDuplicated.push(product);
+        const productsRawList = req.body.products;
+        const productList: Product[] = [];
+        const productsCreated: Product[] = [];
+        const productsDuplicated: Product[] = [];
+
+        for (const productMap of productsRawList) {
+            const product = Product.build(productMap);
+            product.id = uuidv4();
+            productList.push(product);
         }
-      }
-  
-      const responseObj: { products_created: Product[], products_with_duplicates?: Product[] } = {
-        products_created: productsCreated
-      };
-  
-      if (productsDuplicated.length > 0) {
-        responseObj.products_with_duplicates = productsDuplicated;
-      }
-  
-      res.status(200).json(responseObj);
+
+        for (const product of productList) {
+            try {
+                const existingProduct = await Product.findOne({ where: { name: product.name } });
+
+                if (existingProduct) {
+                    productsDuplicated.push(product);
+                } else {
+                    await product.save();
+                    productsCreated.push(product);
+                }
+            } catch (error) {
+                console.log(error);
+                productsDuplicated.push(product);
+            }
+        }
+
+        const responseObj: { products_created: Product[], products_with_duplicates?: Product[] } = {
+            products_created: productsCreated
+        };
+
+        if (productsDuplicated.length > 0) {
+            responseObj.products_with_duplicates = productsDuplicated;
+        }
+
+        res.status(200).json(responseObj);
     } catch (error) {
-      console.log(error);
-      res.status(500).json({
-        msg: "Internal server error",
-      });
+        console.log(error);
+        res.status(500).json({
+            msg: "Internal server error",
+        });
     }
-  };
+};

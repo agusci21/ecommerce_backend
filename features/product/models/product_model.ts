@@ -7,7 +7,7 @@ class Product extends Model{
     declare description: string;
     declare stock : number;
     declare price : number;
-    declare category : string;
+    declare categoryId: string;
 }
 
 Product.init({
@@ -35,6 +35,10 @@ Product.init({
       type: DataTypes.FLOAT,
       allowNull:false,
     },
+    categoryId: {
+      type: DataTypes.STRING,
+      allowNull: true
+    }
   
 },{
     tableName: 'product',

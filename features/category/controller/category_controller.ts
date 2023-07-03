@@ -40,4 +40,24 @@ export const createCategory = async (req: Request, res: Response) => {
             msg: "Internal Server Error"
         })
     }
-} 
+}
+export const getCategoryById = async (req: Request, res: Response) => {
+    const { id } = req.params
+    try {
+        const category = await Category.findByPk(id)
+        if (category) {
+            return res.status(200).json({
+                category
+            })
+        }
+        return res.status(404).json({
+            msg: "Category not found"
+        })
+
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({
+            msg: "Internal Server Error"
+        })
+    }
+}
