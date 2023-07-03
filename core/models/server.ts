@@ -2,6 +2,7 @@ import express, { Application } from 'express'
 import userRoutes from '../../features/user/routes/user';
 import authRoutes from '../../features/auth/routes/auth';
 import productsRoutes from '../../features/product/routes/products_route'
+import categoriesRoutes from '../../features/category/routes/category_route'
 import cors from 'cors';
 import db from '../db/connection';
 import { createTablesIfNotExists } from '../helpers/table_creator_helper';
@@ -14,7 +15,8 @@ class Server {
     private apiPaths = {
         users: '/api/users',
         auth: '/api/auth',
-        products: '/api/products'
+        products: '/api/products',
+        categories: '/api/categories',
     }
 
     constructor() {
@@ -49,6 +51,7 @@ class Server {
         this.app.use( this.apiPaths.users, userRoutes )
         this.app.use( this.apiPaths.auth, authRoutes )
         this.app.use( this.apiPaths.products, productsRoutes )
+        this.app.use( this.apiPaths.categories, categoriesRoutes )
     }
 
 
