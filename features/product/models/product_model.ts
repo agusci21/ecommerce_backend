@@ -7,6 +7,7 @@ class Product extends Model{
     declare description: string;
     declare stock : number;
     declare price : number;
+    declare imageUrl : string;
     declare categoryId: string;
 }
 
@@ -36,6 +37,10 @@ Product.init({
       allowNull:false,
     },
     categoryId: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+    imageUrl: {
       type: DataTypes.STRING,
       allowNull: true
     }
